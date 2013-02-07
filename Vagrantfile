@@ -2,7 +2,7 @@ bootstrap_salt_minions = true
 bootstrap_salt_master = false
 
 salt_minions = [
-    {"identificator" => :loadbalancer, "ip" => "33.33.33.3", "minionid" => "gamma"},
+    {"identificator" => :loadbalancer, "ip" => "33.33.33.3", "minionid" => "loadbalancer"},
 ]
 
 Vagrant::Config.run do |config|
@@ -23,7 +23,7 @@ Vagrant::Config.run do |config|
       config.vm.customize ["modifyvm", :id, "--memory", "256"]
       if bootstrap_salt_minions
         config.vm.provision :shell do |shell|
-          shell.inline = "/bin/bash /vagrant/bootstrap-salt-minion.sh $1 &"
+          shell.inline = "/bin/bash /vagrant/bootstrap-salt-minion.sh $1"
           shell.args = salt_minion["minionid"]
         end
       end
