@@ -14,7 +14,7 @@ What does salt-django-deployment give you?
 - Django CMS - with search
 - Django-shop - with django-mptt categories and searchable products - rudimentary shop so far but all parts present
 
-How to deploy simple-django-deployment.
+How to deploy salt-django-deployment.
 ---------------------------------------
 
 1. Install VirtualBox.
