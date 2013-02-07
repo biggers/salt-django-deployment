@@ -1,5 +1,5 @@
 bootstrap_salt_minions = true
-bootstrap_salt_master = false
+bootstrap_salt_master = true
 
 salt_minions = [
     {"identificator" => :loadbalancer, "ip" => "33.33.33.3", "minionid" => "loadbalancer"},

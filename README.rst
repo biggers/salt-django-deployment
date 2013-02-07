@@ -30,6 +30,8 @@ How to deploy simple-django-deployment.
    
    Accept all keys "sudo salt-key -A" or individual keys.
    
+   Test salt "sudo salt '*' test.ping".
+   
    Provision salt minions by running "sudo salt '*' state.highstate".
 
 
