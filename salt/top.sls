@@ -6,9 +6,12 @@ base:
         - match: nodegroup
         - djangoapp
         - djangowebserver
-    databaseservers: 
+    databases: 
         - match: nodegroup
         - postgresql_server
+    hotfailover: 
+        - match: nodegroup
+        - postgresql_server.hotfailover
     searchservers: 
         - match: nodegroup
         - elasticsearch
@@ -16,7 +19,7 @@ base:
         - match: nodegroup
         - djangoapp
         - djangoceleryworker
-    rabbitmqservers 
+    rabbitmqservers:
         - match: nodegroup
         - rabbitmqbroker
     pgpoolservers: 
