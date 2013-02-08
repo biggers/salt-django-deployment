@@ -10,6 +10,7 @@ Vagrant::Config.run do |config|
   config.vm.define :saltmaster do |config|
     config.vm.box = "precise64"
     config.vm.network :hostonly, '33.33.33.2'
+    config.vm.host_name = "salt"
     config.vm.customize ["modifyvm", :id, "--memory", "256"]
     if bootstrap_salt_master
         config.vm.provision :shell, :path => "bootstrap-salt-master.sh"
@@ -20,6 +21,7 @@ Vagrant::Config.run do |config|
     config.vm.define salt_minion["identificator"] do |config|
       config.vm.box = "precise64"
       config.vm.network :hostonly, salt_minion["ip"]
+      config.vm.host_name = salt_minion["minionid"]
       config.vm.customize ["modifyvm", :id, "--memory", "256"]
       if bootstrap_salt_minions
         config.vm.provision :shell do |shell|
@@ -29,4 +31,5 @@ Vagrant::Config.run do |config|
       end
     end
   end
+  
 end
