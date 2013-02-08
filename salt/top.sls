@@ -4,19 +4,21 @@ base:
         - loadbalancer
     webservers: 
         - match: nodegroup
-        - webserver
+        - djangoapp
+        - djangowebserver
     databaseservers: 
         - match: nodegroup
-        - database
+        - postgresql_server
     searchservers: 
         - match: nodegroup
         - elasticsearch
     celeryworkers: 
         - match: nodegroup
-        - celeryd
+        - djangoapp
+        - djangoceleryworker
     rabbitmqservers 
         - match: nodegroup
-        - rabbitmq
+        - rabbitmqbroker
     pgpoolservers: 
         - match: nodegroup
         - pgpool
