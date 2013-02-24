@@ -6,9 +6,6 @@ searchservers:
   match: elastic*
   sls:
     - elasticsearch
-pgpoolservers: 
-  - match: nodegroup
-  - pgpool
 cacheservers: 
   match: memcached*
   sls:
@@ -23,6 +20,13 @@ hotfailover:
     - postgresql_server.hotfailover
   require:
     - database
+pgpoolservers: 
+  match: pgpool*
+  sls:
+    - pgpool
+  require:
+    - database
+    - hotfailover
 celeryworkers: 
   match: celery*
   sls:
