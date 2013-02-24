@@ -1,16 +1,16 @@
 database: 
-  match: database*,hotfailover*
+  match: database*
   sls:
     - postgresql_server
-searchservers: 
+searchserver: 
   match: elastic*
   sls:
     - elasticsearch
-cacheservers: 
+cacheserver: 
   match: memcached*
   sls:
     - memcached
-rabbitmqservers:
+rabbitmqserver:
   match: rabbitmq*
   sls:
     - rabbitmqbroker
@@ -20,14 +20,14 @@ hotfailover:
     - postgresql_server.hotfailover
   require:
     - database
-pgpoolservers: 
+pgpoolserver: 
   match: pgpool*
   sls:
     - pgpool
   require:
     - database
     - hotfailover
-celeryworkers: 
+celeryworker: 
   match: celery*
   sls:
     - djangoapp
@@ -35,8 +35,8 @@ celeryworkers:
   require:
     - database
     - hotfailover
-    - searchservers
-    - rabbitmqservers
+    - searchserver
+    - rabbitmqserver
 webservers: 
   match: web*
   sls:
@@ -45,8 +45,8 @@ webservers:
   require:
     - database
     - hotfailover
-    - searchservers
-    - celeryworkers
+    - searchserver
+    - celeryworker
 loadbalancer:
   match: load*
   sls:
@@ -57,11 +57,11 @@ all:
   match: '*'
   require:
     -  database
-    -  searchservers
-    -  pgpoolservers
-    -  cacheservers
-    -  rabbitmqservers
+    -  searchserver
+    -  pgpoolserver
+    -  cacheserver
+    -  rabbitmqserver
     -  hotfailover
-    -  celeryworkers
+    -  celeryworker
     -  webservers
     -  loadbalancer
