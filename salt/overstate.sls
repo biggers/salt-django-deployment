@@ -3,7 +3,7 @@ database:
   sls:
     - postgresql_server
 searchserver: 
-  match: elastic*
+  match: search*
   sls:
     - elasticsearch
 cacheserver: 
