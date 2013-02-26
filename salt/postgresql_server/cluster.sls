@@ -6,8 +6,10 @@ pg_hba.conf_noauth:
   extend:
     pg_hba.conf:
       - require:
-        - pkg: postgresql
-          
+        - service: postgresql
+        - context:
+          - no_auth: true
+
 create_cluster:
   cmd.run:
     - name: sleep 10 && pg_dropcluster --stop 8.4 main && LANG=en_GB.utf8 pg_createcluster --start -e UTF-8 8.4 main
@@ -15,7 +17,7 @@ create_cluster:
     - require:
       - file: pg_hba.conf_noauth
 
-postgresql.conf:
+postgresql.conf_auth:
   extend:
     postgresql.conf:
       - require:
@@ -25,4 +27,4 @@ pg_hba.conf_auth:
   extend:
     pg_hba.conf:
       - require:
-        - file: postgresql.conf
+        - file: postgresql.conf_auth
