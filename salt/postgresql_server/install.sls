@@ -4,5 +4,5 @@ postgresql:
       - postgresql
       - postgresql-client-common
       - libpq-dev
-  service.running:
+  service.restart:
     - name: postgresql

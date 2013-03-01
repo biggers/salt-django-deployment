@@ -1,6 +1,10 @@
 include:
   - postgresql_server.install
   - postgresql_server.config
+
+postgresql_restart:
+  service.restart:
+    - name: postgresql
         
 pg_hba.conf_noauth:
   file.managed:
@@ -10,7 +14,7 @@ pg_hba.conf_noauth:
     - group: postgres
     - template: jinja
     - watch_in:
-      - service: postgresql                               
+      - service: postgresql_restart                               
     - require:
       - pkg: postgresql
     - context:
@@ -22,6 +26,7 @@ create_cluster:
     - unless: psql -U postgres -c 'show lc_collate;' | grep -q utf8
     - require:
       - file: pg_hba.conf_noauth
+      - service: postgresql_restart
 
 extend:
   postgresql.conf:
