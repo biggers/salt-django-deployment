@@ -1,30 +1,30 @@
 base:
-    loadbalancers:
-        - match: nodegroup
-        - loadbalancer
-    webservers: 
-        - match: nodegroup
-        - djangoapp
-        - djangowebserver
-    databases: 
-        - match: nodegroup
-        - postgresql_server
-    hotfailover: 
-        - match: nodegroup
-        - postgresql_server.hotfailover
-    searchservers: 
-        - match: nodegroup
-        - elasticsearch
-    celeryworkers: 
-        - match: nodegroup
-        - djangoapp
-        - djangoceleryworker
-    rabbitmqservers:
-        - match: nodegroup
-        - rabbitmqbroker
-    pgpoolservers: 
-        - match: nodegroup
-        - pgpool
-    cacheservers: 
-        - match: nodegroup
-        - memcached
+  'um1*':
+  - match: pcre
+  - loadbalancer
+  'um2*':
+  - match: pcre
+  - djangoapp
+  - djangowebserver
+  'database*':
+  - match: pcre
+  - postgresql_server
+  'um3*':
+  - match: pcre
+  - postgresql_server.hotfailover
+  'um4*':
+  - match: pcre
+  - elasticsearch
+  'um5*':
+  - match: pcre
+  - djangoapp
+  - djangoceleryworker
+  'um6*':
+  - match: pcre
+  - rabbitmqbroker
+  'um7*':
+  - match: pcre
+  - pgpool
+  'um8*':
+  - match: pcre
+  - memcached

@@ -5,7 +5,7 @@ include:
 pg_hba.conf_noauth:
   file.managed:
     - source: salt://postgresql_server/pg_hba.conf
-    - name: /etc/postgresql/8.4/main/pg_hba.conf
+    - name: /etc/postgresql/9.1/main/pg_hba.conf
     - user: postgres
     - group: postgres
     - template: jinja
@@ -14,21 +14,23 @@ pg_hba.conf_noauth:
     - require:
       - pkg: postgresql
     - context:
-      - no_auth: true
+      no_auth: true
 
 create_cluster:
   cmd.run:
-    - name: sleep 10 && pg_dropcluster --stop 8.4 main && LANG=en_GB.utf8 pg_createcluster --start -e UTF-8 8.4 main
+    - name: sleep 10 && pg_dropcluster --stop 9.1 main && pg_createcluster --start -e UTF-8 --locale en_GB.utf8 9.1 main && sleep 10
     - unless: psql -U postgres -c 'show lc_collate;' | grep -q utf8
     - require:
       - file: pg_hba.conf_noauth
 
 extend:
   postgresql.conf:
-    - require:
-      - cmd: create_cluster
-    
+    file.managed:
+      - require:
+        - cmd: create_cluster    
+
 extend:
   pg_hba.conf:
-    - require:
-      - cmd: create_cluster
+    file.managed:
+      - require:
+        - cmd: create_cluster

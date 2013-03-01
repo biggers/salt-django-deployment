@@ -3,6 +3,7 @@ bootstrap_salt_master = true # set to false to just update master config
 
 salt_minions = [
     {"identificator" => :database1, "ip" => "33.33.33.3", "minionid" => "database1", "servergroup" => "none"},
+=begin
     {"identificator" => :search1, "ip" => "33.33.33.4", "minionid" => "search1", "servergroup" => "none"},
     {"identificator" => :memcached1, "ip" => "33.33.33.5", "minionid" => "memcached1", "servergroup" => "none"},
     {"identificator" => :rabbitmq1, "ip" => "33.33.33.6", "minionid" => "rabbitmq1", "servergroup" => "none"},
@@ -12,7 +13,7 @@ salt_minions = [
     {"identificator" => :web1, "ip" => "33.33.33.10", "minionid" => "web1", "servergroup" => "none"},
     {"identificator" => :web2, "ip" => "33.33.33.11", "minionid" => "web2", "servergroup" => "none"},
     {"identificator" => :loadbalancer1, "ip" => "33.33.33.12", "minionid" => "loadbalancer1", "servergroup" => "none"},
-
+=end
 ]
 
 Vagrant::Config.run do |config|
@@ -20,7 +21,6 @@ Vagrant::Config.run do |config|
   config.vm.define :saltmaster do |config|
     config.vm.box = "precise64"
     config.vm.network :hostonly, '33.33.33.2'
-    config.vm.host_name = "salt"
     config.vm.customize ["modifyvm", :id, "--memory", "256"]
     config.vm.provision :shell do |shell|
       shell.inline = "/bin/bash /vagrant/bootstrap-salt-master.sh $1"
@@ -32,7 +32,6 @@ Vagrant::Config.run do |config|
     config.vm.define salt_minion["identificator"] do |config|
       config.vm.box = "precise64"
       config.vm.network :hostonly, salt_minion["ip"]
-      config.vm.host_name = salt_minion["minionid"]
       config.vm.customize ["modifyvm", :id, "--memory", "256"]
       config.vm.provision :shell do |shell|
         shell.inline = "/bin/bash /vagrant/bootstrap-salt-minion.sh $1 $2 $3"
