@@ -1,14 +1,20 @@
 include:
   - postgresql_server.install
   - postgresql_server.config
-  
+        
 pg_hba.conf_noauth:
-  extend:
-    pg_hba.conf:
-      - require:
-        - service: postgresql
-        - context:
-          - no_auth: true
+  file.managed:
+    - source: salt://postgresql_server/pg_hba.conf
+    - name: /etc/postgresql/8.4/main/pg_hba.conf
+    - user: postgres
+    - group: postgres
+    - template: jinja
+    - watch_in:
+      - service: postgresql                               
+    - require:
+      - pkg: postgresql
+    - context:
+      - no_auth: true
 
 create_cluster:
   cmd.run:
@@ -17,14 +23,12 @@ create_cluster:
     - require:
       - file: pg_hba.conf_noauth
 
-postgresql.conf_auth:
-  extend:
-    postgresql.conf:
-      - require:
-        - cmd: create_cluster
-        
-pg_hba.conf_auth:
-  extend:
-    pg_hba.conf:
-      - require:
-        - file: postgresql.conf_auth
+extend:
+  postgresql.conf:
+    - require:
+      - cmd: create_cluster
+    
+extend:
+  pg_hba.conf:
+    - require:
+      - cmd: create_cluster

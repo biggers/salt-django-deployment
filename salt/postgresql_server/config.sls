@@ -12,7 +12,7 @@ postgresql.conf:
       - service: postgresql                               
     - require:
       - pkg: postgresql
-	  - context:
+	- context:
       - trust_host: "127.0.0.1"
         
 pg_hba.conf:
