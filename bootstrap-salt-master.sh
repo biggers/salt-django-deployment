@@ -4,6 +4,7 @@ args=("$@")
 
 if [ "${args[0]}" == "true" ]; then
     /vagrant/bootstrap-salt.sh daily
+    ssh-keygen -t rsa -N "" -f /vagrant/key/pgstandby.key
     sudo apt-get install salt-master
 fi
 
