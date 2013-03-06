@@ -1,7 +1,7 @@
-{% set gunicorn_user =  %}
-{% set root="/home/%s/django" % pillar['user'] %}
-{% set virtualenv='%s/venv' % root %}
-{% set project='%s/project' % root %}
+include:
+  - djangoapp
+  - supervisor
+  - nginx
 
 /etc/supervisor/conf.d/{{ pillar['user'] }}_gunicorn.conf:
   file.managed:
@@ -10,7 +10,7 @@
     - context:
       virtualenv: {{ virtualenv }}
       project: {{ project }}
-      gunicorn_user: {{ pillar['user'] }}
+      user: {{ pillar['user'] }}
     - watch_in:
       - supervisor
       

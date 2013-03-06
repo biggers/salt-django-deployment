@@ -45,6 +45,6 @@ How to deploy salt-django-deployment.
    
    Test salt "sudo salt '*' test.ping".
    
-   Provision salt minions by running "sudo salt '*' state.highstate".
+   Provision salt minions by running "sudo salt '*' state.highstate" for now, work in progress on "sudo salt '*' state.over"
 
 
