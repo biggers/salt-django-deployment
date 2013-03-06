@@ -9,4 +9,4 @@ if [ "${args[0]}" == "true" ]; then
 fi
 
 sudo cp /vagrant/master.conf /etc/salt/master
-sudo /etc/init.d/salt-master restart
+sudo restart salt-master
