@@ -3,8 +3,6 @@ args=("$@")
 
 if [ "${args[2]}" == "true" ]; then
     /vagrant/bootstrap-salt.sh daily
-    sudo cp /vagrant/key/minion.pub /etc/salt/pki/minion/minion.pub
-    sudo cp /vagrant/key/minion.pub /etc/salt/pki/minion/minion.pub
 fi
 
 sudo cp /vagrant/minion.conf /etc/salt/minion

@@ -1,4 +1,4 @@
-bind = "{{ gunicorn_host }}:{{ gunicorn_port }}"
+bind = "{{ ip }}:{{ port }}"
 errorlog = "{{ log }}"
 
 import multiprocessing

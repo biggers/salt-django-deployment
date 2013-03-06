@@ -3,32 +3,33 @@ include:
   - supervisor
   - nginx
 
-/etc/supervisor/conf.d/{{ pillar['user'] }}_gunicorn.conf:
+/etc/supervisor/conf.d/{{ pillar['django']['user'] }}_gunicorn.conf:
   file.managed:
     - source: salt://djangowebserver/gunicorn_supervisor.conf
     - template: jinja
     - context:
-      virtualenv: {{ virtualenv }}
-      project: {{ project }}
-      user: {{ pillar['user'] }}
+      virtualenv: {{ pillar['django']['virtualenv'] }}
+      project: {{ pillar['django']['project'] }}
+      user: {{ pillar['django']['user'] }}
     - watch_in:
       - supervisor
       
-{{ project }}/gunicorn.conf.py:
+{{ pillar['django']['project'] }}/gunicorn.conf.py:
   file.managed:
     - source: salt://djangowebserver/gunicorn.conf.py
     - template: jinja
     - context:
-      ip: {{ pillar['ip'] }}
-      port: {{ pillar['port'] }}
-      log: {{ project }}/gunicorn.log
+      ip: {{ pillar['django']['ip'] }}
+      port: {{ pillar['django']['port'] }}
+      log: {{ pillar['django']['project'] }}/gunicorn.log
 
-/etc/nginx/sites-enabled/{{ pillar['projectname'] }}.conf:
+/etc/nginx/sites-enabled/{{ pillar['django']['projectname'] }}.conf:
   file.managed:
     - source: salt://djangowebserver/site.conf
     - template: jinja
     - context:
-      ip: {{ pillar['ip'] }}
-      port: {{ pillar['port'] }}
+      ip: {{ pillar['django']['ip'] }}
+      port: {{ pillar['django']['port'] }}
+      servername: {{ pillar['django']['servername'] }}
     - watch_in:
       - nginx
