@@ -20,7 +20,7 @@ nginx:                 # ID declaration
     - watch_in:
       - nginx
     - require:
-      - service: nginx
+      - pkg: nginx
         
 /etc/nginx/sites-enabled:
   file.directory:
