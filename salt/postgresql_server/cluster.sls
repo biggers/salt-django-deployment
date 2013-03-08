@@ -1,11 +1,13 @@
 include:
   - postgresql_server.install
   - postgresql_server.config
+  
+{% if salt['data.getval']('cluster_created') !== True %}
 
 postgresql_restart:
   service.restart:
     - name: postgresql
-        
+     
 pg_hba.conf_noauth:
   file.managed:
     - source: salt://postgresql_server/pg_hba.conf
@@ -39,3 +41,11 @@ extend:
     file.managed:
       - require:
         - cmd: create_cluster
+
+cluster_created:
+  data.update:
+    - True
+    - require:
+      - cmd: create_cluster  
+
+{% endif %}
