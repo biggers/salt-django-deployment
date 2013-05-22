@@ -1,11 +1,12 @@
 {% set user = "django" %}
-{% set projectname = "test" %}
-{% set root = '/home/%s/django' % user %}
+{% set projectname = "myproj" %}
+{% set root = '/var/django' %}
 django:
   virtualenv: {{ root }}/venv
-  project: {{ root }}/project/{{ projectname }}
+  project: {{ root }}/{{ projectname }}
   user: {{ user }}
   ip: "127.0.0.1"
-  port: 8000
-  projectname: myproject
+  port: 8080
+  projectname: {{ projectname }}
   servername: 127.0.0.1
+

@@ -1,43 +1,52 @@
-bootstrap_salt_minions = true # set to false to just update minion config
-bootstrap_salt_master = true # set to false to just update master config
+# -*-ruby-*-
+master_ip = "10.168.253.1"
 
+# ssh vagrant@10.168.253.8
 salt_minions = [
-    {"identificator" => :database1, "ip" => "33.33.33.3", "minionid" => "database1"},
-    {"identificator" => :web1, "ip" => "33.33.33.10", "minionid" => "web1"},
-    {"identificator" => :web2, "ip" => "33.33.33.11", "minionid" => "web2"},
-=begin
-    {"identificator" => :search1, "ip" => "33.33.33.4", "minionid" => "search1"},
-    {"identificator" => :memcached1, "ip" => "33.33.33.5", "minionid" => "memcached1"},
-    {"identificator" => :rabbitmq1, "ip" => "33.33.33.6", "minionid" => "rabbitmq1"},
-    {"identificator" => :failover1, "ip" => "33.33.33.7", "minionid" => "failover1"},
-    {"identificator" => :pgpool1, "ip" => "33.33.33.8", "minionid" => "pgpool1"},
-    {"identificator" => :celery1, "ip" => "33.33.33.9", "minionid" => "celery1"},
-    {"identificator" => :loadbalancer1, "ip" => "33.33.33.12", "minionid" => "loadbalancer1"},
-=end
+                {"identificator" => :dalek0, "ip" => "10.168.253.8",
+                 "http" => 7080,
+                 "ssl" => 7443,
+                 "mem" => 1024,
+                 "bootstrap" => true},
+                {"identificator" => :dalek1, "ip" => "10.168.253.9",
+                 "http" => 8080,
+                 "ssl" => 8443,
+                 "mem" => 1024, 
+                 "minionid" => "dalek1",
+                 "bootstrap" => true},
+                {"identificator" => :dalek2, "ip" => "10.168.253.10",
+                 "http" => 9080,
+                 "ssl" => 9443,
+                 "mem" => 1024, 
+                 "minionid" => "dalek2",
+                 "bootstrap" => true},
 ]
 
-Vagrant::Config.run do |config|
+Vagrant.configure("2") do |config|
 
-  config.vm.define :saltmaster do |config|
-    config.vm.box = "precise64"
-    config.vm.network :hostonly, '33.33.33.2'
-    config.vm.customize ["modifyvm", :id, "--memory", "256"]
-    config.vm.provision :shell do |shell|
-      shell.inline = "/bin/bash /vagrant/bootstrap-salt-master.sh $1"
-      shell.args = (bootstrap_salt_master ? "true" : "false")
-    end
-  end
-  
   salt_minions.each do |salt_minion|
+    hostname = salt_minion["identificator"]
+
     config.vm.define salt_minion["identificator"] do |config|
-      config.vm.box = "precise64"
-      config.vm.network :hostonly, salt_minion["ip"]
-      config.vm.customize ["modifyvm", :id, "--memory", "256"]
-      config.vm.provision :shell do |shell|
-        shell.inline = "/bin/bash /vagrant/bootstrap-salt-minion.sh $1 $2"
-        shell.args = salt_minion["minionid"] + " " + (bootstrap_salt_minions ? "true" : "false")
-      end
+    config.vm.box = "precise64"
+    config.vm.box_url = "http://files.vagrantup.com/precise64.box"
+    config.vm.hostname = hostname.to_s
+
+    config.vm.network :private_network, ip: salt_minion["ip"]
+    config.vm.network :forwarded_port, guest: 80, host: salt_minion["http"]
+    config.vm.network :forwarded_port, guest: 443, host: salt_minion["ssl"]
+
+    config.vm.provider :virtualbox do |vb|
+      vb.customize ["modifyvm", :id,  "--memory", salt_minion["mem"]]
+      vb.gui = true     # default, false  -- headless mode
     end
+
+    config.vm.provision :shell do |shell|
+      shell.inline = "/bin/bash /vagrant/bootstrap-salt-minion.sh $1 $2 $3"
+      shell.args = salt_minion["bootstrap"].to_s  + " " + hostname.to_s + " " + master_ip
+    end
+
   end
-  
+
+end
 end
