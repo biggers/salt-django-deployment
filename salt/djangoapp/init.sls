@@ -14,7 +14,7 @@ virtualenv:
 
 {{ pillar['django']['user'] }}:
   user.present:
-    - home: /home/{{ pillar['django']['user'] }}
+    - home: /var/{{ pillar['django']['user'] }}
     - shell: /bin/bash
     
 {{ pillar['django']['virtualenv'] }}:
@@ -31,6 +31,8 @@ django_env:
     - distribute: True
     - requirements: salt://djangoapp/requirements.txt
     - runas: {{ pillar['django']['user'] }}
+    - activate: True
+    - upgrade: True
     - require:
       - pip: virtualenv
       - user: {{ pillar['django']['user'] }}

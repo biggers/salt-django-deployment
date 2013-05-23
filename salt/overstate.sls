@@ -1,67 +1,67 @@
 database: 
-  match: database*
+  match: dalek1*
   sls:
     - postgresql_server
-searchserver: 
-  match: search*
-  sls:
-    - elasticsearch
-cacheserver: 
-  match: memcached*
-  sls:
-    - memcached
+# searchserver: 
+#   match: search*
+#   sls:
+#     - elasticsearch
+# cacheserver: 
+#   match: memcached*
+#   sls:
+#     - memcached
 rabbitmqserver:
-  match: rabbitmq*
+  match: dalek1*
   sls:
     - rabbitmqbroker
-hotfailover: 
-  match: failover*
-  sls:
-    - postgresql_server.hotfailover
-  require:
-    - database
-pgpoolserver: 
-  match: pgpool*
-  sls:
-    - pgpool
-  require:
-    - database
-    - hotfailover
+# hotfailover: 
+#   match: failover*
+#   sls:
+#     - postgresql_server.hotfailover
+#   require:
+#     - database
+# pgpoolserver: 
+#   match: pgpool*
+#   sls:
+#     - pgpool
+#   require:
+#     - database
+#     - hotfailover
 celeryworker: 
-  match: celery*
+  match: dalek1*
   sls:
     - djangoapp
     - djangoceleryworker
   require:
     - database
-    - hotfailover
-    - searchserver
+# - hotfailover
+# - searchserver
     - rabbitmqserver
 webservers: 
-  match: web*
+  match: dalek2*
   sls:
     - djangoapp
     - djangowebserver
   require:
     - database
-    - hotfailover
-    - searchserver
+# - hotfailover
+# - searchserver
     - celeryworker
-loadbalancer:
-  match: load*
-  sls:
-    - loadbalancer
-  require:
-    - webservers
+# loadbalancer:
+#   match: load*
+#   sls:
+#     - loadbalancer
+#   require:
+#     - webservers
 all:
   match: '*'
   require:
     -  database
-    -  searchserver
-    -  pgpoolserver
-    -  cacheserver
+#    -  searchserver
+#    -  pgpoolserver
+#    -  cacheserver
     -  rabbitmqserver
-    -  hotfailover
+#    -  hotfailover
     -  celeryworker
     -  webservers
-    -  loadbalancer
+#    -  loadbalancer
