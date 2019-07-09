@@ -1,4 +1,4 @@
-Django==1.4.21
+django>=1.11.19
 PIL
 South
 django-reversion==1.6
